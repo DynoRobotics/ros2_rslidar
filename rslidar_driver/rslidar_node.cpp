@@ -27,7 +27,16 @@ int main(int argc, char* argv[])
 {
   signal(SIGINT, my_handler);
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<rslidar_driver::rslidarDriver>());
+  
+  // start the driver
+  auto node = std::make_shared<rslidar_driver::rslidarDriver>();
+  
+  // loop until shut down or end of file
+  while (rclcpp::ok() && node->poll())
+  {
+    rclcpp::spin_some(node);
+  }
+  
   rclcpp::shutdown();
   return 0;
 }
