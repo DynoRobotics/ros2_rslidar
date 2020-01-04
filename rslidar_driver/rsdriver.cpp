@@ -303,7 +303,6 @@ void rslidarDriver::difopPoll(void)
     }
     if (rc < 0)
       return;  // end of file reached?
-    rclcpp::spin_some(shared_from_this());
   }
 }
 
