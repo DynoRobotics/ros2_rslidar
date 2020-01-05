@@ -282,7 +282,6 @@ bool rslidarDriver::poll(void)
 
   // notify diagnostics that a message has been published, updating its status
   diag_topic_->tick(scan->header.stamp);
-  diagnostics_.force_update(); // NOTE(fredrik): Not sure this call is necessary in ROS2? 
 
   return true;
 }
