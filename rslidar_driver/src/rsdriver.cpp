@@ -15,6 +15,8 @@
  */
 #include "rsdriver.hpp"
 
+std::atomic<bool> canceled_(false);
+
 namespace rslidar_driver
 {
   static const unsigned int POINTS_ONE_CHANNEL_PER_SECOND = 18000;
@@ -144,8 +146,8 @@ namespace rslidar_driver
   this->get_parameter_or("output_difop_topic", output_difop_topic, std::string("rslidar_packets_difop"));
   difop_output_ = this->create_publisher<rslidar_msgs::msg::RslidarPacket>(output_difop_topic, 10);
 
-  difop_thread_ = std::shared_ptr<std::thread>(new std::thread(&rslidarDriver::difopPoll, this));
-
+  difop_thread_ = std::thread(std::bind(&rslidarDriver::difopPoll, this));
+ 
   this->get_parameter_or("time_synchronization", time_synchronization_, false);
 
   if (time_synchronization_)
@@ -155,6 +157,21 @@ namespace rslidar_driver
   }
 }
 
+
+
+
+  rslidarDriver::~rslidarDriver()
+  {
+    // Make sure to join the thread on shutdown.
+    canceled_.store(true);
+    if (difop_thread_.joinable()) {
+      difop_thread_.join();
+    }
+  }
+
+
+
+  
 /** poll the device
  *
  *  @returns true unless end of file reached
@@ -293,7 +310,7 @@ void rslidarDriver::difopPoll(void)
 {
   // reading and publishing scans as fast as possible.
 
-  while (rclcpp::ok())
+  while (rclcpp::ok() && !canceled_.load())
   {
     // keep reading
     rslidar_msgs::msg::RslidarPacket::UniquePtr difop_packet_ptr(new rslidar_msgs::msg::RslidarPacket());

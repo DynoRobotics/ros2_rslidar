@@ -16,6 +16,7 @@
 #define _RSDRIVER_H_
 
 #include <string>
+#include <thread>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/int32.hpp"
@@ -40,9 +41,7 @@ public:
  */
   rslidarDriver();
 
-  ~rslidarDriver()
-  {
-  }
+  ~rslidarDriver();
 
   bool poll(void);
   void difopPoll(void);
@@ -75,8 +74,8 @@ private:
   double diag_min_freq_;
   double diag_max_freq_;
   std::shared_ptr<diagnostic_updater::TopicDiagnostic> diag_topic_;
-  std::shared_ptr<std::thread> difop_thread_;
-
+  std::thread difop_thread_;
+  
   // add for time synchronization
   bool time_synchronization_;
   uint32_t skip_num_;

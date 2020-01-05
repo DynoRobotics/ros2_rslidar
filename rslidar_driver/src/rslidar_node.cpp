@@ -16,16 +16,9 @@
 #include "rsdriver.hpp"
 
 using namespace rslidar_driver;
-volatile sig_atomic_t flag = 1;
-
-static void my_handler(int sig)
-{
-  flag = 0;
-}
 
 int main(int argc, char* argv[])
 {
-  signal(SIGINT, my_handler);
   rclcpp::init(argc, argv);
   
   // start the driver

@@ -26,7 +26,8 @@
  */
 #include "input.hpp"
 
-extern volatile sig_atomic_t flag;
+extern std::atomic<bool> canceled_;
+
 namespace rslidar_driver
 {
   static const size_t packet_size = sizeof(rslidar_msgs::msg::RslidarPacket().data);
@@ -141,7 +142,7 @@ InputSocket::~InputSocket(void)
 
   sockaddr_in sender_address;
   socklen_t sender_address_len = sizeof(sender_address);
-  while (flag == 1)
+  while (!canceled_.load())
   {
     // Receive packets that should now be available from the
     // socket using a blocking read.
@@ -199,7 +200,7 @@ InputSocket::~InputSocket(void)
 
     RCLCPP_WARN(private_nh_->get_logger(), "[driver][socket] incomplete rslidar packet read: %d bytes", nbytes);
   }
-  if (flag == 0)
+  if (canceled_.load())
   {
     abort();
   }
@@ -304,7 +305,7 @@ InputPCAP::~InputPCAP(void)
   struct pcap_pkthdr* header;
   const u_char* pkt_data;
 
-  while (flag == 1)
+  while (!canceled_.load())
   {
     int res;
     if ((res = pcap_next_ex(pcap_, &header, &pkt_data)) >= 0)
@@ -378,7 +379,7 @@ InputPCAP::~InputPCAP(void)
     empty_ = true;  // maybe the file disappeared?
   }                 // loop back and try again
 
-  if (flag == 0)
+  if (canceled_.load())
   {
     abort();
   }
