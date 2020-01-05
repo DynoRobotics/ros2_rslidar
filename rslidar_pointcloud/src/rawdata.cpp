@@ -176,17 +176,17 @@ void RawData::loadConfigFile()
         break;
       if (numOfLasers == 16)
       {
-        int tmp = fscanf(f_inten, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n", &a[0], &a[1], &a[2], &a[3],
-                         &a[4], &a[5], &a[6], &a[7], &a[8], &a[9], &a[10], &a[11], &a[12], &a[13], &a[14], &a[15]);
+        fscanf(f_inten, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n", &a[0], &a[1], &a[2], &a[3],
+               &a[4], &a[5], &a[6], &a[7], &a[8], &a[9], &a[10], &a[11], &a[12], &a[13], &a[14], &a[15]);
       }
       else if (numOfLasers == 32)
       {
-        int tmp = fscanf(f_inten,
-                         "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,"
-                         "%f,%f,%f,%f\n",
-                         &a[0], &a[1], &a[2], &a[3], &a[4], &a[5], &a[6], &a[7], &a[8], &a[9], &a[10], &a[11], &a[12],
-                         &a[13], &a[14], &a[15], &a[16], &a[17], &a[18], &a[19], &a[20], &a[21], &a[22], &a[23], &a[24],
-                         &a[25], &a[26], &a[27], &a[28], &a[29], &a[30], &a[31]);
+        fscanf(f_inten,
+               "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,"
+               "%f,%f,%f,%f\n",
+               &a[0], &a[1], &a[2], &a[3], &a[4], &a[5], &a[6], &a[7], &a[8], &a[9], &a[10], &a[11], &a[12],
+               &a[13], &a[14], &a[15], &a[16], &a[17], &a[18], &a[19], &a[20], &a[21], &a[22], &a[23], &a[24],
+               &a[25], &a[26], &a[27], &a[28], &a[29], &a[30], &a[31]);
       }
       if (Curvesis_new)
       {
@@ -219,7 +219,7 @@ void RawData::loadConfigFile()
     int loopn = 0;
     while (!feof(f_angle))
     {
-      int tmp = fscanf(f_angle, "%f,%f\n", &b[loopk], &d[loopk]);
+      fscanf(f_angle, "%f,%f\n", &b[loopk], &d[loopk]);
       loopk++;
       if (loopk > (numOfLasers - 1))
         break;
@@ -254,24 +254,24 @@ void RawData::loadConfigFile()
     {
       if (numOfLasers == 16)
       {
-        int tmp = fscanf(f_channel,
-                         "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%"
-                         "d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
-                         &c[0], &c[1], &c[2], &c[3], &c[4], &c[5], &c[6], &c[7], &c[8], &c[9], &c[10], &c[11], &c[12],
-                         &c[13], &c[14], &c[15], &c[16], &c[17], &c[18], &c[19], &c[20], &c[21], &c[22], &c[23], &c[24],
-                         &c[25], &c[26], &c[27], &c[28], &c[29], &c[30], &c[31], &c[32], &c[33], &c[34], &c[35], &c[36],
-                         &c[37], &c[38], &c[39], &c[40]);
+        fscanf(f_channel,
+               "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%"
+               "d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+               &c[0], &c[1], &c[2], &c[3], &c[4], &c[5], &c[6], &c[7], &c[8], &c[9], &c[10], &c[11], &c[12],
+               &c[13], &c[14], &c[15], &c[16], &c[17], &c[18], &c[19], &c[20], &c[21], &c[22], &c[23], &c[24],
+               &c[25], &c[26], &c[27], &c[28], &c[29], &c[30], &c[31], &c[32], &c[33], &c[34], &c[35], &c[36],
+               &c[37], &c[38], &c[39], &c[40]);
       }
       else
       {
-        int tmp = fscanf(f_channel,
-                         "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%"
-                         "d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
-                         &c[0], &c[1], &c[2], &c[3], &c[4], &c[5], &c[6], &c[7], &c[8], &c[9], &c[10], &c[11], &c[12],
-                         &c[13], &c[14], &c[15], &c[16], &c[17], &c[18], &c[19], &c[20], &c[21], &c[22], &c[23], &c[24],
-                         &c[25], &c[26], &c[27], &c[28], &c[29], &c[30], &c[31], &c[32], &c[33], &c[34], &c[35], &c[36],
-                         &c[37], &c[38], &c[39], &c[40], &c[41], &c[42], &c[43], &c[44], &c[45], &c[46], &c[47], &c[48],
-                         &c[49], &c[50]);
+        fscanf(f_channel,
+               "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%"
+               "d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+               &c[0], &c[1], &c[2], &c[3], &c[4], &c[5], &c[6], &c[7], &c[8], &c[9], &c[10], &c[11], &c[12],
+               &c[13], &c[14], &c[15], &c[16], &c[17], &c[18], &c[19], &c[20], &c[21], &c[22], &c[23], &c[24],
+               &c[25], &c[26], &c[27], &c[28], &c[29], &c[30], &c[31], &c[32], &c[33], &c[34], &c[35], &c[36],
+               &c[37], &c[38], &c[39], &c[40], &c[41], &c[42], &c[43], &c[44], &c[45], &c[46], &c[47], &c[48],
+               &c[49], &c[50]);
       }
       for (loopl = 0; loopl < TEMPERATURE_RANGE + 1; loopl++)
       {
@@ -302,7 +302,7 @@ void RawData::loadConfigFile()
       int loopk = 0;
       while (!feof(f_curvesRate))
       {
-        int tmp = fscanf(f_curvesRate, "%f\n", &CurvesRate[loopk]);
+        fscanf(f_curvesRate, "%f\n", &CurvesRate[loopk]);
         loopk++;
         if (loopk > (numOfLasers - 1))
           break;
