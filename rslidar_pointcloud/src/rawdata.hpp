@@ -182,24 +182,25 @@ private:
   bool info_print_flag_;
   bool isBpearlLidar_;
   bool angle_flag_;
+  
+  int VERT_ANGLE[32];
+  int HORI_ANGLE[32];
+  float aIntensityCal[7][32];
+  float aIntensityCal_old[1600][32];
+  bool Curvesis_new = true;
+  int g_ChannelNum[32][51];
+  float CurvesRate[32];
+  
+  float temper = 31.0;
+  int tempPacketNum = 0;
+  int numOfLasers = 16;
+  int TEMPERATURE_RANGE = 40;
 
   /* cos/sin lookup table */
   std::vector<double> cos_lookup_table_;
   std::vector<double> sin_lookup_table_;
 };
 
-static int VERT_ANGLE[32];
-static int HORI_ANGLE[32];
-static float aIntensityCal[7][32];
-static float aIntensityCal_old[1600][32];
-static bool Curvesis_new = true;
-static int g_ChannelNum[32][51];
-static float CurvesRate[32];
-
-static float temper = 31.0;
-static int tempPacketNum = 0;
-static int numOfLasers = 16;
-static int TEMPERATURE_RANGE = 40;
 }  // namespace rslidar_rawdata
 
 #endif  // __RAWDATA_H
