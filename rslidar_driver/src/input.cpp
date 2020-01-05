@@ -245,8 +245,7 @@ InputSocket::~InputSocket(void)
    *  @param packet_rate expected device packet frequency (Hz)
    *  @param filename PCAP dump file name
    */
-InputPCAP::InputPCAP(rclcpp::Node* private_nh, uint16_t port, double packet_rate, std::string filename,
-                     bool read_once, bool read_fast, double repeat_delay)
+InputPCAP::InputPCAP(rclcpp::Node* private_nh, uint16_t port, double packet_rate, std::string filename)
   : Input(private_nh, port), packet_rate_(packet_rate), filename_(filename)
 {
   pcap_ = NULL;

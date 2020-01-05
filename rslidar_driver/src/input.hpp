@@ -111,7 +111,7 @@ class InputPCAP : public Input
 {
 public:
   InputPCAP(rclcpp::Node* private_nh, uint16_t port = MSOP_DATA_PORT_NUMBER, double packet_rate = 0.0,
-            std::string filename = "", bool read_once = false, bool read_fast = false, double repeat_delay = 0.0);
+            std::string filename = "");
 
   virtual ~InputPCAP();
 
