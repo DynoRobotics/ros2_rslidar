@@ -12,7 +12,7 @@
  *  ROS driver node for the Robosense 3D LIDARs.
  */
 #include <rclcpp/rclcpp.hpp>
-#include "rsdriver.h"
+#include "rsdriver.hpp"
 #include "std_msgs/msg/string.hpp"
 
 using namespace rslidar_driver;

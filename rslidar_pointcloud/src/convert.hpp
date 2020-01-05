@@ -21,7 +21,7 @@
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include "rslidar_msgs/msg/rslidar_packet.hpp"
 #include "rslidar_msgs/msg/rslidar_scan.hpp"
-#include "rawdata.h"
+#include "rawdata.hpp"
 
 namespace rslidar_pointcloud
 {

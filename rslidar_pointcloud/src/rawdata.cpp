@@ -17,7 +17,7 @@
  *  formats.
  *
  */
-#include "rawdata.h"
+#include "rawdata.hpp"
 
 namespace rslidar_rawdata
 {

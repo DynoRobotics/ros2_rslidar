@@ -21,7 +21,7 @@ find_package(rslidar_msgs REQUIRED)
 find_package(diagnostic_updater REQUIRED)
 
 
-add_executable(rslidar_node src/rslidar_node.cpp src/rsdriver.cpp src/input.cc)
+add_executable(rslidar_node src/rslidar_node.cpp src/rsdriver.cpp src/input.cpp)
 target_link_libraries(rslidar_node ${rclcpp_LIBRARIES} ${libpcap_LIBRARIES})
 ament_target_dependencies(rslidar_node rclcpp std_msgs rslidar_msgs sensor_msgs diagnostic_updater)
 

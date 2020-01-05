@@ -13,7 +13,7 @@
     This class converts raw RSLIDAR 3D LIDAR packets to PointCloud2.
 
 */
-#include "convert.h"
+#include "convert.hpp"
 #include <pcl_conversions/pcl_conversions.h>
 
 namespace rslidar_pointcloud

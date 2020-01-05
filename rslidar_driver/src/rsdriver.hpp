@@ -22,7 +22,7 @@
 #include <diagnostic_updater/publisher.hpp>
 #include "rslidar_msgs/msg/rslidar_packet.hpp"
 #include "rslidar_msgs/msg/rslidar_scan.hpp"
-#include "input.h"
+#include "input.hpp"
 
 using std::placeholders::_1;
 

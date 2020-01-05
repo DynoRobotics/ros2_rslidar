@@ -27,7 +27,7 @@ find_package(PCL REQUIRED)
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-add_executable(cloud_node src/cloud_node.cc src/convert.cc src/rawdata.cc)
+add_executable(cloud_node src/cloud_node.cpp src/convert.cpp src/rawdata.cpp)
 target_link_libraries(cloud_node ${rclcpp_LIBRARIES} ${PCL_LIBRARIES})
 ament_target_dependencies(cloud_node rclcpp std_msgs rslidar_msgs sensor_msgs pcl_conversions)
 

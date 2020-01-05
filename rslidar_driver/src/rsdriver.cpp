@@ -12,7 +12,7 @@
  *
  *  ROS driver implementation for the RILIDAR 3D LIDARs
  */
-#include "rsdriver.h"
+#include "rsdriver.hpp"
 
 namespace rslidar_driver
 {

@@ -23,7 +23,7 @@
  *     InputPCAP -- derived class provides a similar interface from a
  *              PCAP dump
  */
-#include "input.h"
+#include "input.hpp"
 
 extern volatile sig_atomic_t flag;
 namespace rslidar_driver

@@ -12,7 +12,7 @@
     This ROS node converts raw RSLIDAR LIDAR packets to PointCloud2.
 
 */
-#include "convert.h"
+#include "convert.hpp"
 
 /** Main node entry point. */
 int main(int argc, char* argv[])
