@@ -20,8 +20,8 @@
 #include <std_msgs/msg/int32.hpp>
 #include <diagnostic_updater/diagnostic_updater.hpp>
 #include <diagnostic_updater/publisher.hpp>
-#include "rslidar_msgs/msg/rslidar_packet.hpp"
-#include "rslidar_msgs/msg/rslidar_scan.hpp"
+#include <rslidar_msgs/msg/rslidar_packet.hpp>
+#include <rslidar_msgs/msg/rslidar_scan.hpp>
 #include "input.hpp"
 
 using std::placeholders::_1;

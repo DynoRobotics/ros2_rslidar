@@ -32,7 +32,7 @@
 #include <pcap.h>
 #include <netinet/in.h>
 #include <rclcpp/rclcpp.hpp>
-#include "rslidar_msgs/msg/rslidar_packet.hpp"
+#include <rslidar_msgs/msg/rslidar_packet.hpp>
 #include <string>
 #include <sstream>
 #include <cmath>

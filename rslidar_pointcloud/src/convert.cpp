@@ -14,7 +14,6 @@
 
 */
 #include "convert.hpp"
-#include <pcl_conversions/pcl_conversions.h>
 
 namespace rslidar_pointcloud
 {
