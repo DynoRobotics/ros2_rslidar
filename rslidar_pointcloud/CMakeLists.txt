@@ -20,6 +20,24 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(rslidar_msgs REQUIRED)
+find_package(pcl_conversions REQUIRED)
+find_package(PCL REQUIRED)
+
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+add_executable(cloud_node src/cloud_node.cc src/convert.cc src/rawdata.cc)
+target_link_libraries(cloud_node ${rclcpp_LIBRARIES} ${PCL_LIBRARIES})
+ament_target_dependencies(cloud_node rclcpp std_msgs rslidar_msgs sensor_msgs pcl_conversions)
+
+
+install(TARGETS
+  cloud_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
