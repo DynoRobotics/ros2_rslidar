@@ -1,4 +1,3 @@
-/* -*- mode: C++ -*- */
 /*
  *  Copyright (C) 2009, 2010 Austin Robot Technology, Jack O'Quin
  *  Copyright (C) 2011 Jesse Vera

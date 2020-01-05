@@ -1,4 +1,3 @@
-/* -*- mode: C++ -*- */
 /*
  *  Copyright (C) 2012 Austin Robot Technology, Jack O'Quin
  *	Copyright (C) 2017 Robosense, Tony Zhang
