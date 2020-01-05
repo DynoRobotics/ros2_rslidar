@@ -12,6 +12,7 @@
  *
  *  ROS driver node for the Robosense 3D LIDARs.
  */
+#include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "rsdriver.hpp"
 
@@ -20,16 +21,16 @@ using namespace rslidar_driver;
 int main(int argc, char* argv[])
 {
   rclcpp::init(argc, argv);
-  
+
   // start the driver
   auto node = std::make_shared<rslidar_driver::rslidarDriver>();
-  
+
   // loop until shut down or end of file
   while (rclcpp::ok() && node->poll())
   {
     rclcpp::spin_some(node);
   }
-  
+
   rclcpp::shutdown();
   return 0;
 }

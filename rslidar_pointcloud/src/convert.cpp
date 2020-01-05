@@ -18,25 +18,24 @@
 
 namespace rslidar_pointcloud
 {
-std::string model;
+
 
 /** @brief Constructor. */
 Convert::Convert() : Node("cloud_node"), data_(new rslidar_rawdata::RawData(this))
 {
   data_->loadConfigFile();  // load lidar parameters
-  this->get_parameter_or("model", model, std::string("RS16"));
+  this->get_parameter_or("model", model_, std::string("RS16"));
 
   // advertise output point cloud (before subscribing to input data)
   std::string output_points_topic;
   this->get_parameter_or("output_points_topic", output_points_topic, std::string("rslidar_points"));
   output_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(output_points_topic, 10);
-  
-  
+
+
   // subscribe to rslidarScan packets
   std::string input_packets_topic;
   this->get_parameter_or("input_packets_topic", input_packets_topic, std::string("rslidar_packets"));
   rslidar_scan_ = this->create_subscription<rslidar_msgs::msg::RslidarScan>(input_packets_topic, 10, std::bind(&Convert::processScan, this, std::placeholders::_1));
-  
 }
 
 /** @brief Callback for raw scan messages. */
@@ -46,7 +45,7 @@ Convert::Convert() : Node("cloud_node"), data_(new rslidar_rawdata::RawData(this
   outPoints->header.stamp = pcl_conversions::toPCL(scanMsg->header).stamp;
   outPoints->header.frame_id = scanMsg->header.frame_id;
   outPoints->clear();
-  if (model == "RS16")
+  if (model_ == "RS16")
   {
     outPoints->height = 16;
     outPoints->width = 24 * (int)scanMsg->packets.size();

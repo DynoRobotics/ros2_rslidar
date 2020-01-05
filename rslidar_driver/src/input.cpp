@@ -206,7 +206,8 @@ InputSocket::~InputSocket(void)
   }
 
   if (pkt.data[0] == 0xA5 && pkt.data[1] == 0xFF && pkt.data[2] == 0x00 && pkt.data[3] == 0x5A)
-  {//difop
+  {
+    // difop
     int rpm = (pkt.data[8]<<8)|pkt.data[9];
     int mode = 1;
 
@@ -323,7 +324,8 @@ InputPCAP::~InputPCAP(void)
       memcpy(&pkt.data[0], pkt_data + 42, packet_size);
 
       if (pkt.data[0] == 0xA5 && pkt.data[1] == 0xFF && pkt.data[2] == 0x00 && pkt.data[3] == 0x5A)
-      {//difop
+      {
+        // difop
         int rpm = (pkt.data[8]<<8)|pkt.data[9];
         int mode = 1;
 
@@ -383,7 +385,7 @@ InputPCAP::~InputPCAP(void)
   {
     abort();
   }
-  
+
   return 0;
 }
-}
+} // namespace rslidar_driver

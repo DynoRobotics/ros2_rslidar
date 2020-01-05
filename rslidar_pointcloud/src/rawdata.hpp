@@ -20,10 +20,13 @@
  *  @author Fredrik Löfgren
  */
 
-#ifndef _RAWDATA_H
-#define _RAWDATA_H
+#ifndef RAWDATA_HPP_
+#define RAWDATA_HPP_
 
 #include <stdio.h>
+#include <string>
+#include <algorithm>
+#include <vector>
 
 #include "rclcpp/rclcpp.hpp"
 #include "rslidar_msgs/msg/rslidar_packet.hpp"
@@ -158,7 +161,7 @@ public:
 
   /*estimate the packet type*/
   int isABPacket(int distance);
-  
+
   void processDifop(const rslidar_msgs::msg::RslidarPacket::SharedPtr difop_msg);
   rclcpp::Subscription<rslidar_msgs::msg::RslidarPacket>::SharedPtr difop_sub_;
   bool is_init_curve_;
@@ -182,7 +185,7 @@ private:
   bool info_print_flag_;
   bool isBpearlLidar_;
   bool angle_flag_;
-  
+
   int VERT_ANGLE[32];
   int HORI_ANGLE[32];
   float aIntensityCal[7][32];
@@ -190,7 +193,7 @@ private:
   bool Curvesis_new = true;
   int g_ChannelNum[32][51];
   float CurvesRate[32];
-  
+
   float temper = 31.0;
   int tempPacketNum = 0;
   int numOfLasers = 16;
@@ -203,4 +206,4 @@ private:
 
 }  // namespace rslidar_rawdata
 
-#endif  // __RAWDATA_H
+#endif  // RAWDATA_HPP_

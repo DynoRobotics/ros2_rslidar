@@ -444,7 +444,6 @@ void RawData::processDifop(const rslidar_msgs::msg::RslidarPacket::SharedPtr dif
     {
       intensity_mode_ = 3;  // mode for the top firmware higher than T6R23V9
     }
-    
   }
 
   if (!this->is_init_angle_)
@@ -602,7 +601,7 @@ int RawData::correctAzimuth(float azimuth_f, int passageway)
 }
 
 //------------------------------------------------------------
-//校准反射强度值
+// 校准反射强度值
 float RawData::calibrateIntensity(float intensity, int calIdx, int distance)
 {
   if (intensity_mode_ == 3)
@@ -729,7 +728,7 @@ float RawData::calibrateIntensity(float intensity, int calIdx, int distance)
 }
 
 //------------------------------------------------------------
-//校准反射强度值 old
+// 校准反射强度值 old
 float RawData::calibrateIntensity_old(float intensity, int calIdx, int distance)
 {
   int algDist;
@@ -874,13 +873,11 @@ void RawData::unpack(const rslidar_msgs::msg::RslidarPacket& pkt, pcl::PointClou
     }
     else
     {
-      
       azi1 = 256 * raw->blocks[block].rotation_1 + raw->blocks[block].rotation_2;
       azi2 = 256 * raw->blocks[block - 1].rotation_1 + raw->blocks[block - 1].rotation_2;
-      
     }
     uint16_t diff = (36000 + azi1 - azi2) % 36000;
-    if (diff > 100)  //to avoid when the lidar is set to specific FOV that cause the big difference between angle
+    if (diff > 100)  // to avoid when the lidar is set to specific FOV that cause the big difference between angle
     {
       diff = 0;
     }

@@ -36,9 +36,9 @@ namespace rslidar_driver
   // product model
   if (config_.model == "RS16")
   {
-    //for 0.18 degree horizontal angle resolution
-    //packet_rate = 840;
-    //for 0.2 degree horizontal angle resolution
+    // for 0.18 degree horizontal angle resolution
+    // packet_rate = 840;
+    // for 0.2 degree horizontal angle resolution
     packet_rate = 750;
     model_full_name = "RS-LiDAR-16";
   }
@@ -122,7 +122,7 @@ namespace rslidar_driver
   diag_topic_.reset(new diagnostic_updater::TopicDiagnostic("rslidar_packets", diagnostics_,
                                                             diagnostic_updater::FrequencyStatusParam(&diag_min_freq_, &diag_max_freq_, 0.1, 10),
                                                             diagnostic_updater::TimeStampStatusParam()));
-  
+
   // open rslidar input device or file
   if (dump_file != "")  // have PCAP file?
   {
@@ -292,7 +292,7 @@ bool rslidarDriver::poll(void)
   }
 
   // publish message using time of last packet read
-  //RCLCPP_DEBUG("[driver] Publishing a full rslidar scan.");
+  // RCLCPP_DEBUG("[driver] Publishing a full rslidar scan.");
   scan->header.stamp = scan->packets.back().stamp;
   scan->header.frame_id = config_.frame_id;
 

@@ -12,10 +12,12 @@
  *
  *  ROS driver interface for the RSLIDAR 3D LIDARs
  */
-#ifndef _RSDRIVER_H_
-#define _RSDRIVER_H_
+#ifndef RSDRIVER_HPP_
+#define RSDRIVER_HPP_
 
 #include <string>
+#include <memory>
+#include <utility>
 #include <thread>
 
 #include "rclcpp/rclcpp.hpp"
@@ -75,7 +77,7 @@ private:
   double diag_max_freq_;
   std::shared_ptr<diagnostic_updater::TopicDiagnostic> diag_topic_;
   std::thread difop_thread_;
-  
+
   // add for time synchronization
   bool time_synchronization_;
   uint32_t skip_num_;
@@ -84,4 +86,4 @@ private:
 
 }  // namespace rslidar_driver
 
-#endif
+#endif // RSDRIVER_HPP_

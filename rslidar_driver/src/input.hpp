@@ -25,8 +25,8 @@
  *              PCAP dump
  */
 
-#ifndef __RSLIDAR_INPUT_H_
-#define __RSLIDAR_INPUT_H_
+#ifndef INPUT_HPP_
+#define INPUT_HPP_
 
 #include <unistd.h>
 #include <stdio.h>
@@ -100,7 +100,6 @@ private:
 private:
   int sockfd_;
   in_addr devip_;
-
 };
 
 /** @brief rslidar input from PCAP dump file.
@@ -110,8 +109,8 @@ private:
 class InputPCAP : public Input
 {
 public:
-  InputPCAP(rclcpp::Node* private_nh, uint16_t port = MSOP_DATA_PORT_NUMBER, double packet_rate = 0.0,
-            std::string filename = "");
+  InputPCAP(rclcpp::Node* private_nh, uint16_t port = MSOP_DATA_PORT_NUMBER,
+            double packet_rate = 0.0, std::string filename = "");
 
   virtual ~InputPCAP();
 
@@ -128,6 +127,6 @@ private:
   bool read_fast_;
   double repeat_delay_;
 };
-}
+} // namespace rslidar_driver
 
-#endif  // __RSLIDAR_INPUT_H
+#endif  // INPUT_HPP_

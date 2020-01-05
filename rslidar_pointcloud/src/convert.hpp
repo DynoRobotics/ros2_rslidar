@@ -15,8 +15,11 @@
     This class converts raw Robosense 3D LIDAR packets to PointCloud2.
 
 */
-#ifndef _CONVERT_H_
-#define _CONVERT_H_
+#ifndef CONVERT_HPP_
+#define CONVERT_HPP_
+
+#include <string>
+#include <memory>
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
@@ -37,13 +40,12 @@ public:
   }
 
 private:
-  
   void processScan(const rslidar_msgs::msg::RslidarScan::SharedPtr skip_num);
-
+  std::string model_;
   std::shared_ptr<rslidar_rawdata::RawData> data_;
   rclcpp::Subscription<rslidar_msgs::msg::RslidarScan>::SharedPtr rslidar_scan_;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr output_;
 };
 
 }  // namespace rslidar_pointcloud
-#endif
+#endif // CONVERT_HPP_
