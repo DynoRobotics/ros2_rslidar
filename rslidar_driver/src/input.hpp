@@ -70,7 +70,7 @@ public:
   {
   }
 
-  virtual int getPacket(rslidar_msgs::msg::RslidarPacket* pkt, const double time_offset) = 0;
+  virtual int getPacket(rslidar_msgs::msg::RslidarPacket& pkt, const double time_offset) = 0;
 
   int getRpm(void);
   int getReturnMode(void);
@@ -94,7 +94,7 @@ public:
 
   virtual ~InputSocket();
 
-  virtual int getPacket(rslidar_msgs::msg::RslidarPacket* pkt, const double time_offset);
+  virtual int getPacket(rslidar_msgs::msg::RslidarPacket& pkt, const double time_offset);
 
 private:
 private:
@@ -115,7 +115,7 @@ public:
 
   virtual ~InputPCAP();
 
-  virtual int getPacket(rslidar_msgs::msg::RslidarPacket* pkt, const double time_offset);
+  virtual int getPacket(rslidar_msgs::msg::RslidarPacket& pkt, const double time_offset);
 
 private:
   rclcpp::Rate packet_rate_;

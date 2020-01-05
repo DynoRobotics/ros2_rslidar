@@ -161,7 +161,7 @@ namespace rslidar_driver
  */
 bool rslidarDriver::poll(void)
 {  // Allocate a new shared pointer for zero-copy sharing with other nodelets.
-  rslidar_msgs::msg::RslidarScan::Ptr scan(new rslidar_msgs::msg::RslidarScan);
+  rslidar_msgs::msg::RslidarScan::UniquePtr scan(new rslidar_msgs::msg::RslidarScan());
 
   // Since the rslidar delivers data at a very high rate, keep
   // reading and publishing scans as fast as possible.
@@ -173,7 +173,7 @@ bool rslidarDriver::poll(void)
     {
       while (true)
       {
-        int rc = msop_input_->getPacket(&tmp_packet, config_.time_offset);
+        int rc = msop_input_->getPacket(tmp_packet, config_.time_offset);
         if (rc == 0)
           break;  // got a full packet?
         if (rc < 0)
@@ -229,7 +229,7 @@ bool rslidarDriver::poll(void)
       while (true)
       {
         // keep reading until full packet received
-        int rc = msop_input_->getPacket(&scan->packets[0], config_.time_offset);
+        int rc = msop_input_->getPacket(scan->packets[0], config_.time_offset);
         if (rc == 0)
           break;  // got a full packet?
         if (rc < 0)
@@ -243,7 +243,7 @@ bool rslidarDriver::poll(void)
       while (true)
       {
         // keep reading until full packet received
-        int rc = msop_input_->getPacket(&scan->packets[i], config_.time_offset);
+        int rc = msop_input_->getPacket(scan->packets[i], config_.time_offset);
         if (rc == 0)
           break;  // got a full packet?
         if (rc < 0)
@@ -278,10 +278,13 @@ bool rslidarDriver::poll(void)
   //RCLCPP_DEBUG("[driver] Publishing a full rslidar scan.");
   scan->header.stamp = scan->packets.back().stamp;
   scan->header.frame_id = config_.frame_id;
-  msop_output_->publish(scan);
+
 
   // notify diagnostics that a message has been published, updating its status
   diag_topic_->tick(scan->header.stamp);
+
+  
+  msop_output_->publish(std::move(scan));
 
   return true;
 }
@@ -289,17 +292,16 @@ bool rslidarDriver::poll(void)
 void rslidarDriver::difopPoll(void)
 {
   // reading and publishing scans as fast as possible.
-  rslidar_msgs::msg::RslidarPacket::Ptr difop_packet_ptr(new rslidar_msgs::msg::RslidarPacket);
+
   while (rclcpp::ok())
   {
     // keep reading
-    rslidar_msgs::msg::RslidarPacket difop_packet_msg;
-    int rc = difop_input_->getPacket(&difop_packet_msg, config_.time_offset);
+    rslidar_msgs::msg::RslidarPacket::UniquePtr difop_packet_ptr(new rslidar_msgs::msg::RslidarPacket());
+    int rc = difop_input_->getPacket(*difop_packet_ptr, config_.time_offset);
     if (rc == 0)
     {
-//      RCLCPP_DEBUG("[driver] Publishing a difop data.");
-      *difop_packet_ptr = difop_packet_msg;
-      difop_output_->publish(difop_packet_ptr);
+      //RCLCPP_DEBUG("[driver] Publishing a difop data.");
+      difop_output_->publish(std::move(difop_packet_ptr));
     }
     if (rc < 0)
       return;  // end of file reached?

@@ -131,7 +131,7 @@ InputSocket::~InputSocket(void)
 }
 
 /** @brief Get one rslidar packet. */
-  int InputSocket::getPacket(rslidar_msgs::msg::RslidarPacket* pkt, const double time_offset)
+  int InputSocket::getPacket(rslidar_msgs::msg::RslidarPacket& pkt, const double time_offset)
 {
   double time1 = private_nh_->get_clock()->now().seconds();
   struct pollfd fds[1];
@@ -175,7 +175,7 @@ InputSocket::~InputSocket(void)
         return 1;
       }
     } while ((fds[0].revents & POLLIN) == 0);
-    ssize_t nbytes = recvfrom(sockfd_, &pkt->data[0], packet_size, 0, (sockaddr*)&sender_address, &sender_address_len);
+    ssize_t nbytes = recvfrom(sockfd_, &pkt.data[0], packet_size, 0, (sockaddr*)&sender_address, &sender_address_len);
 
     if (nbytes < 0)
     {
@@ -204,15 +204,15 @@ InputSocket::~InputSocket(void)
     abort();
   }
 
-  if (pkt->data[0] == 0xA5 && pkt->data[1] == 0xFF && pkt->data[2] == 0x00 && pkt->data[3] == 0x5A)
+  if (pkt.data[0] == 0xA5 && pkt.data[1] == 0xFF && pkt.data[2] == 0x00 && pkt.data[3] == 0x5A)
   {//difop
-    int rpm = (pkt->data[8]<<8)|pkt->data[9];
+    int rpm = (pkt.data[8]<<8)|pkt.data[9];
     int mode = 1;
 
-    if ((pkt->data[45] == 0x08 && pkt->data[46] == 0x02 && pkt->data[47] >= 0x09) || (pkt->data[45] > 0x08)
-        || (pkt->data[45] == 0x08 && pkt->data[46] > 0x02))
+    if ((pkt.data[45] == 0x08 && pkt.data[46] == 0x02 && pkt.data[47] >= 0x09) || (pkt.data[45] > 0x08)
+        || (pkt.data[45] == 0x08 && pkt.data[46] > 0x02))
     {
-      if (pkt->data[300] != 0x01 && pkt->data[300] != 0x02)
+      if (pkt.data[300] != 0x01 && pkt.data[300] != 0x02)
       {
         mode = 0;
       }
@@ -229,7 +229,7 @@ InputSocket::~InputSocket(void)
   // Average the times at which we begin and end reading.  Use that to
   // estimate when the scan occurred. Add the time offset.
   double time2 = private_nh_->get_clock()->now().seconds();
-  pkt->stamp = rclcpp::Time((time2 + time1) / 2.0 + time_offset);
+  pkt.stamp = rclcpp::Time((time2 + time1) / 2.0 + time_offset);
 
   return 0;
 }
@@ -299,7 +299,7 @@ InputPCAP::~InputPCAP(void)
 }
 
 /** @brief Get one rslidar packet. */
-  int InputPCAP::getPacket(rslidar_msgs::msg::RslidarPacket* pkt, const double time_offset)
+  int InputPCAP::getPacket(rslidar_msgs::msg::RslidarPacket& pkt, const double time_offset)
 {
   struct pcap_pkthdr* header;
   const u_char* pkt_data;
@@ -319,17 +319,17 @@ InputPCAP::~InputPCAP(void)
         packet_rate_.sleep();
 
 
-      memcpy(&pkt->data[0], pkt_data + 42, packet_size);
+      memcpy(&pkt.data[0], pkt_data + 42, packet_size);
 
-      if (pkt->data[0] == 0xA5 && pkt->data[1] == 0xFF && pkt->data[2] == 0x00 && pkt->data[3] == 0x5A)
+      if (pkt.data[0] == 0xA5 && pkt.data[1] == 0xFF && pkt.data[2] == 0x00 && pkt.data[3] == 0x5A)
       {//difop
-        int rpm = (pkt->data[8]<<8)|pkt->data[9];
+        int rpm = (pkt.data[8]<<8)|pkt.data[9];
         int mode = 1;
 
-        if ((pkt->data[45] == 0x08 && pkt->data[46] == 0x02 && pkt->data[47] >= 0x09) || (pkt->data[45] > 0x08)
-            || (pkt->data[45] == 0x08 && pkt->data[46] > 0x02))
+        if ((pkt.data[45] == 0x08 && pkt.data[46] == 0x02 && pkt.data[47] >= 0x09) || (pkt.data[45] > 0x08)
+            || (pkt.data[45] == 0x08 && pkt.data[46] > 0x02))
         {
-          if (pkt->data[300] != 0x01 && pkt->data[300] != 0x02)
+          if (pkt.data[300] != 0x01 && pkt.data[300] != 0x02)
           {
             mode = 0;
           }
@@ -344,7 +344,7 @@ InputPCAP::~InputPCAP(void)
         }
       }
 
-      pkt->stamp = private_nh_->get_clock()->now();  // time_offset not considered here, as no
+      pkt.stamp = private_nh_->get_clock()->now();  // time_offset not considered here, as no
                                       // synchronization required
       empty_ = false;
       return 0;  // success
