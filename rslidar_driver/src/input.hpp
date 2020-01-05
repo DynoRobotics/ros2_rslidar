@@ -3,6 +3,7 @@
  *  Copyright (C) 2009, 2010 Austin Robot Technology, Jack O'Quin
  *  Copyright (C) 2015, Jack O'Quin
  *	Copyright (C) 2017, Robosense, Tony Zhang
+ *	Copyright (C) 2019, Dyno Robotics, Fredrik Löfgren
  *
  *
  *  License: Modified BSD Software License Agreement
