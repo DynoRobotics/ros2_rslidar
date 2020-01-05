@@ -383,5 +383,7 @@ InputPCAP::~InputPCAP(void)
   {
     abort();
   }
+  
+  return 0;
 }
 }
