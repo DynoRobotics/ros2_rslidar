@@ -17,6 +17,7 @@
  *  @author Patrick Beeson
  *  @author Jack O'Quin
  *  @author Tony Zhang
+ *  @author Fredrik Löfgren
  */
 
 #ifndef _RAWDATA_H
