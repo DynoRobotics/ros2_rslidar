@@ -52,7 +52,7 @@ Convert::Convert() : Node("cloud_node"), data_(new rslidar_rawdata::RawData(this
     outPoints->is_dense = false;
     outPoints->resize(outPoints->height * outPoints->width);
   }
-  else if (model == "RS32" || model == "RSBPEARL" || model == "RSBPEARL_MINI")
+  else if (model_ == "RS32" || model_ == "RSBPEARL" || model_ == "RSBPEARL_MINI")
   {
     outPoints->height = 32;
     outPoints->width = 12 * (int)scanMsg->packets.size();
