@@ -23,11 +23,16 @@ find_package(sensor_msgs REQUIRED)
 find_package(rslidar_msgs REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
+find_package(PCL REQUIRED COMPONENTS common io)
 
 add_executable(cloud_node src/cloud_node.cpp src/convert.cpp src/rawdata.cpp)
 target_link_libraries(cloud_node ${rclcpp_LIBRARIES} ${Boost_LIBRARIES})
 ament_target_dependencies(cloud_node rclcpp std_msgs rslidar_msgs sensor_msgs pcl_conversions)
 
+include_directories(
+  include
+  ${PCL_COMMON_INCLUDE_DIRS}
+)
 
 install(TARGETS
   cloud_node
