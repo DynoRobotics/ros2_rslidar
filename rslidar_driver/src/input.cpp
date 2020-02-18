@@ -229,7 +229,7 @@ InputSocket::~InputSocket(void)
   // Average the times at which we begin and end reading.  Use that to
   // estimate when the scan occurred. Add the time offset.
   double time2 = private_nh_->get_clock()->now().seconds();
-  pkt.stamp = rclcpp::Time((time2 + time1) / 2.0 + time_offset);
+  pkt.stamp = rclcpp::Time(((time2 + time1) / 2.0 + time_offset)*1e9);
 
   return 0;
 }

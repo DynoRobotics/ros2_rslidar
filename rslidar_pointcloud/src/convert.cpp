@@ -44,7 +44,6 @@ Convert::Convert() : Node("cloud_node"), data_(new rslidar_rawdata::RawData(this
   void Convert::processScan(const rslidar_msgs::msg::RslidarScan::SharedPtr scanMsg)
 {
   pcl::PointCloud<pcl::PointXYZI>::Ptr outPoints(new pcl::PointCloud<pcl::PointXYZI>);
-  outPoints->header.stamp = pcl_conversions::toPCL(scanMsg->header).stamp;
   outPoints->header.frame_id = scanMsg->header.frame_id;
   outPoints->clear();
   if (model_ == "RS16")
@@ -71,6 +70,7 @@ Convert::Convert() : Node("cloud_node"), data_(new rslidar_rawdata::RawData(this
   }
   sensor_msgs::msg::PointCloud2 outMsg;
   pcl::toROSMsg(*outPoints, outMsg);
+  outMsg.header.stamp = scanMsg->header.stamp;
 
   output_->publish(outMsg);
 }

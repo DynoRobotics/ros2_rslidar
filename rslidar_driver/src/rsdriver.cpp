@@ -3,7 +3,7 @@
  *  Copyright (C) 2009-2012 Austin Robot Technology, Jack O'Quin
  *	Copyright (C) 2017 Robosense, Tony Zhang
  *	Copyright (C) 2019, Dyno Robotics, Fredrik Löfgren
- *
+*
  *  License: Modified BSD Software License Agreement
  *
  *  $Id$
@@ -20,9 +20,12 @@ namespace rslidar_driver
   static const unsigned int POINTS_ONE_CHANNEL_PER_SECOND = 18000;
   static const unsigned int BLOCKS_ONE_CHANNEL_PER_PKT = 12;
 
-  rslidarDriver::rslidarDriver() : Node("rsdriver"), diagnostics_(this)
+  rslidarDriver::rslidarDriver() : 
+    Node("rsdriver"), 
+    diagnostics_(this)
 {
   this->declare_parameter("frame_id", rclcpp::ParameterValue("rslidar"));
+  this->declare_parameter("time_synchronization", rclcpp::ParameterValue(false));
 
   skip_num_ = 0;
   // use private node handle to get parameters
@@ -148,7 +151,7 @@ namespace rslidar_driver
 
   difop_thread_ = std::thread(std::bind(&rslidarDriver::difopPoll, this));
 
-  this->get_parameter_or("time_synchronization", time_synchronization_, false);
+  this->get_parameter("time_synchronization", time_synchronization_);
 
   if (time_synchronization_)
   {
@@ -282,9 +285,13 @@ bool rslidarDriver::poll(void)
       stm.tm_hour = (int)pkt.data[23];
       stm.tm_min  = (int)pkt.data[24];
       stm.tm_sec  = (int)pkt.data[25];
-      double stamp_double = mktime(&stm) + 0.001 * (256 * pkt.data[26] + pkt.data[27]) +
-                            0.000001 * (256 * pkt.data[28] + pkt.data[29]);
-      sync_header.header.stamp = rclcpp::Time(stamp_double);
+
+      // FIXME(sam): This puts seconds in the nanosecond field, 1 in seconds and appears not synced with computer time
+      // double stamp_double = mktime(&stm) + 0.001 * (256 * pkt.data[26] + pkt.data[27]) +
+      //                       0.000001 * (256 * pkt.data[28] + pkt.data[29]);
+      // sync_header.header.stamp = rclcpp::Time(stamp_double);
+
+      sync_header.header.stamp = get_clock()->now();
 
       output_sync_->publish(sync_header);
     }
@@ -292,7 +299,12 @@ bool rslidarDriver::poll(void)
 
   // publish message using time of last packet read
   // RCLCPP_DEBUG("[driver] Publishing a full rslidar scan.");
-  scan->header.stamp = scan->packets.back().stamp;
+
+  // FIXME(sam): This puts seconds in the nanosecond field, 1 in seconds and appears not synced with computer time
+  // scan->header.stamp = scan->packets.back().stamp;
+
+  scan->header.stamp = get_clock()->now();
+
   scan->header.frame_id = config_.frame_id;
 
 
