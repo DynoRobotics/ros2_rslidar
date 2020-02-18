@@ -23,12 +23,14 @@ namespace rslidar_pointcloud
 /** @brief Constructor. */
 Convert::Convert() : Node("cloud_node"), data_(new rslidar_rawdata::RawData(this))
 {
+  this->declare_parameter("output_points_topic", rclcpp::ParameterValue("rslidar_points"));
+
   data_->loadConfigFile();  // load lidar parameters
   this->get_parameter_or("model", model_, std::string("RS16"));
 
   // advertise output point cloud (before subscribing to input data)
   std::string output_points_topic;
-  this->get_parameter_or("output_points_topic", output_points_topic, std::string("rslidar_points"));
+  this->get_parameter("output_points_topic", output_points_topic);
   output_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(output_points_topic, 10);
 
 

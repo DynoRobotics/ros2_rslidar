@@ -22,9 +22,11 @@ namespace rslidar_driver
 
   rslidarDriver::rslidarDriver() : Node("rsdriver"), diagnostics_(this)
 {
+  this->declare_parameter("frame_id", rclcpp::ParameterValue("rslidar"));
+
   skip_num_ = 0;
   // use private node handle to get parameters
-  this->get_parameter_or("frame_id", config_.frame_id, std::string("rslidar"));
+  this->get_parameter("frame_id", config_.frame_id);
 
   // get model name, validate string, determine packet rate
   this->get_parameter_or("model", config_.model, std::string("RS16"));
