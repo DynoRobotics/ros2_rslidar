@@ -24,7 +24,7 @@
  *     InputPCAP -- derived class provides a similar interface from a
  *              PCAP dump
  */
-#include "input.hpp"
+#include "rslidar_driver/input.hpp"
 
 namespace rslidar_driver
 {

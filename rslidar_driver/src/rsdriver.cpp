@@ -13,15 +13,17 @@
  *
  *  ROS driver implementation for the RILIDAR 3D LIDARs
  */
-#include "rsdriver.hpp"
+#include "rslidar_driver/rsdriver.hpp"
 
 namespace rslidar_driver
 {
   static const unsigned int POINTS_ONE_CHANNEL_PER_SECOND = 18000;
   static const unsigned int BLOCKS_ONE_CHANNEL_PER_PKT = 12;
 
-  rslidarDriver::rslidarDriver() : 
-    Node("rsdriver"), 
+  rslidarDriver::rslidarDriver() : rslidarDriver(rclcpp::NodeOptions()) {}
+
+  rslidarDriver::rslidarDriver(const rclcpp::NodeOptions& options) : 
+    Node("rsdriver", options), 
     diagnostics_(this)
 {
   this->declare_parameter("frame_id", rclcpp::ParameterValue("rslidar"));
@@ -149,8 +151,12 @@ namespace rslidar_driver
   this->get_parameter_or("output_difop_topic", output_difop_topic, std::string("rslidar_packets_difop"));
   difop_output_ = this->create_publisher<rslidar_msgs::msg::RslidarPacket>(output_difop_topic, 10);
 
-  difop_thread_ = std::thread(std::bind(&rslidarDriver::difopPoll, this));
+  //difop_thread_ = std::thread(std::bind(&rslidarDriver::difopPoll, this));
+  //poll_thread_ = std::thread(std::bind(&rslidarDriver::poll, this));
 
+  difop_poll_timer_ = this->create_wall_timer(0s, std::bind(&rslidarDriver::difopPoll, this));
+  poll_timer_ = this->create_wall_timer(0s, std::bind(&rslidarDriver::poll, this));
+  
   this->get_parameter("time_synchronization", time_synchronization_);
 
   if (time_synchronization_)
@@ -161,14 +167,15 @@ namespace rslidar_driver
 }
 
 
-
-
   rslidarDriver::~rslidarDriver()
   {
     // Make sure to join the thread on shutdown.
-    if (difop_thread_.joinable()) {
+    /*if (difop_thread_.joinable()) {
       difop_thread_.join();
     }
+    if (poll_thread_.joinable()) {
+      poll_thread_.join();
+    }*/
   }
 
 
@@ -311,7 +318,10 @@ bool rslidarDriver::poll(void)
   // notify diagnostics that a message has been published, updating its status
   diag_topic_->tick(scan->header.stamp);
 
-  
+  //std::weak_ptr<std::remove_pointer<decltype(msop_output_.get())>::type> captured_pub = msop_output_;
+  //auto pub_ptr = captured_pub.lock();
+  //pub_ptr->publish(std::move(scan));
+
   msop_output_->publish(std::move(scan));
 
   return true;
@@ -321,8 +331,8 @@ void rslidarDriver::difopPoll(void)
 {
   // reading and publishing scans as fast as possible.
 
-  while (rclcpp::ok())
-  {
+  //while (rclcpp::ok())
+  //{
     // keep reading
     rslidar_msgs::msg::RslidarPacket::UniquePtr difop_packet_ptr(new rslidar_msgs::msg::RslidarPacket());
     int rc = difop_input_->getPacket(*difop_packet_ptr, config_.time_offset);
@@ -333,7 +343,7 @@ void rslidarDriver::difopPoll(void)
     }
     if (rc < 0)
       return;  // end of file reached?
-  }
+  //}
 }
 
 

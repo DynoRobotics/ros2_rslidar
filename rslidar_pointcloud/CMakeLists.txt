@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(ros2_rslidar_pointcloud)
+project(rslidar_pointcloud)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -25,8 +25,12 @@ find_package(pcl_conversions REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(PCL REQUIRED COMPONENTS common io)
 
-add_executable(cloud_node src/cloud_node.cpp src/convert.cpp src/rawdata.cpp)
-target_link_libraries(cloud_node ${rclcpp_LIBRARIES} ${Boost_LIBRARIES})
+add_library(pointcloud_converter src/convert.cpp src/rawdata.cpp)
+target_link_libraries(pointcloud_converter ${rclcpp_LIBRARIES} ${Boost_LIBRARIES})
+ament_target_dependencies(pointcloud_converter rclcpp std_msgs rslidar_msgs sensor_msgs pcl_conversions)
+
+add_executable(cloud_node src/cloud_node.cpp)
+target_link_libraries(cloud_node ${rclcpp_LIBRARIES} ${Boost_LIBRARIES} pointcloud_converter)
 ament_target_dependencies(cloud_node rclcpp std_msgs rslidar_msgs sensor_msgs pcl_conversions)
 
 include_directories(
@@ -39,7 +43,18 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+install(TARGETS
+  pointcloud_converter
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 
+install(DIRECTORY
+  include/
+  DESTINATION
+  include
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -51,5 +66,9 @@ if(BUILD_TESTING)
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+ament_export_dependencies(rclcpp std_msgs rslidar_msgs sensor_msgs pcl_conversions)
+ament_export_include_directories(include ${PCL_COMMON_INCLUDE_DIRS})
+ament_export_libraries(pointcloud_converter ${Boost_LIBRARIES})
 
 ament_package()

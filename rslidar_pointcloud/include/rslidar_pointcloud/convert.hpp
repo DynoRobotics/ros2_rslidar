@@ -34,13 +34,14 @@ class Convert : public rclcpp::Node
 {
 public:
   Convert();
+  Convert(const rclcpp::NodeOptions& options);
 
   ~Convert()
   {
   }
 
 private:
-  void processScan(const rslidar_msgs::msg::RslidarScan::SharedPtr skip_num);
+  void processScan(const rslidar_msgs::msg::RslidarScan::UniquePtr scanMsg);
   std::string model_;
   std::shared_ptr<rslidar_rawdata::RawData> data_;
   rclcpp::Subscription<rslidar_msgs::msg::RslidarScan>::SharedPtr rslidar_scan_;

@@ -14,14 +14,15 @@
     This class converts raw RSLIDAR 3D LIDAR packets to PointCloud2.
 
 */
-#include "convert.hpp"
+#include "rslidar_pointcloud/convert.hpp"
 
 namespace rslidar_pointcloud
 {
 
+Convert::Convert() : Convert(rclcpp::NodeOptions()) {}
 
 /** @brief Constructor. */
-Convert::Convert() : Node("cloud_node"), data_(new rslidar_rawdata::RawData(this))
+Convert::Convert(const rclcpp::NodeOptions& options) : Node("cloud_node", options), data_(new rslidar_rawdata::RawData(this))
 {
   this->declare_parameter("output_points_topic", rclcpp::ParameterValue("rslidar_points"));
 
@@ -41,7 +42,7 @@ Convert::Convert() : Node("cloud_node"), data_(new rslidar_rawdata::RawData(this
 }
 
 /** @brief Callback for raw scan messages. */
-  void Convert::processScan(const rslidar_msgs::msg::RslidarScan::SharedPtr scanMsg)
+  void Convert::processScan(const rslidar_msgs::msg::RslidarScan::UniquePtr scanMsg)
 {
   pcl::PointCloud<pcl::PointXYZI>::Ptr outPoints(new pcl::PointCloud<pcl::PointXYZI>);
   outPoints->header.frame_id = scanMsg->header.frame_id;

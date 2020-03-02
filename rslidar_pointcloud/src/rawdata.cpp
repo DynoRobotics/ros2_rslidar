@@ -18,7 +18,7 @@
  *  formats.
  *
  */
-#include "rawdata.hpp"
+#include "rslidar_pointcloud/rawdata.hpp"
 
 namespace rslidar_rawdata
 {

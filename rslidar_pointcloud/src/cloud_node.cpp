@@ -14,7 +14,7 @@
 
 */
 #include <memory>
-#include "convert.hpp"
+#include "rslidar_pointcloud/convert.hpp"
 
 /** Main node entry point. */
 int main(int argc, char* argv[])

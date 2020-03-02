@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ros2_rslidar_pointcloud</name>
+  <name>rslidar_pointcloud</name>
   <version>0.1.0</version>
   <description>Point cloud conversions for rslidar 3D LIDARs.</description>
   <maintainer email="fredrik@dynorobotics.se">Fredrik Löfgren</maintainer>

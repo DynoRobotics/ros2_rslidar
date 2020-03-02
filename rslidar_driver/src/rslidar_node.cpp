@@ -14,7 +14,7 @@
  */
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
-#include "rsdriver.hpp"
+#include "rslidar_driver/rsdriver.hpp"
 
 using namespace rslidar_driver;
 
@@ -26,10 +26,11 @@ int main(int argc, char* argv[])
   auto node = std::make_shared<rslidar_driver::rslidarDriver>();
 
   // loop until shut down or end of file
-  while (rclcpp::ok() && node->poll())
+  /*while (rclcpp::ok() && node->poll())
   {
     rclcpp::spin_some(node);
-  }
+  }*/
+  rclcpp::spin(node);
 
   rclcpp::shutdown();
   return 0;

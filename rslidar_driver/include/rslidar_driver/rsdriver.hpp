@@ -19,6 +19,8 @@
 #include <memory>
 #include <utility>
 #include <thread>
+#include "chrono"
+#include <ctime>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/int32.hpp"
@@ -29,7 +31,7 @@
 #include "input.hpp"
 
 using std::placeholders::_1;
-
+using namespace std::chrono_literals;
 
 namespace rslidar_driver
 {
@@ -42,6 +44,7 @@ public:
  * @param private_nh    通过这个节点传参数
  */
   rslidarDriver();
+  rslidarDriver(const rclcpp::NodeOptions& options);
 
   ~rslidarDriver();
 
@@ -76,7 +79,11 @@ private:
   double diag_min_freq_;
   double diag_max_freq_;
   std::shared_ptr<diagnostic_updater::TopicDiagnostic> diag_topic_;
-  std::thread difop_thread_;
+  //std::thread difop_thread_;
+  //std::thread poll_thread_;
+  rclcpp::TimerBase::SharedPtr poll_timer_;
+  rclcpp::TimerBase::SharedPtr difop_poll_timer_;
+  
 
   // add for time synchronization
   bool time_synchronization_;
