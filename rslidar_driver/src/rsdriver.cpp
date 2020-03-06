@@ -151,11 +151,13 @@ namespace rslidar_driver
   this->get_parameter_or("output_difop_topic", output_difop_topic, std::string("rslidar_packets_difop"));
   difop_output_ = this->create_publisher<rslidar_msgs::msg::RslidarPacket>(output_difop_topic, 10);
 
-  //difop_thread_ = std::thread(std::bind(&rslidarDriver::difopPoll, this));
-  //poll_thread_ = std::thread(std::bind(&rslidarDriver::poll, this));
+  difop_thread_ = std::thread(std::bind(&rslidarDriver::difopPollThread, this));
+  poll_thread_ = std::thread(std::bind(&rslidarDriver::pollThread, this));
 
-  difop_poll_timer_ = this->create_wall_timer(0s, std::bind(&rslidarDriver::difopPoll, this));
-  poll_timer_ = this->create_wall_timer(0s, std::bind(&rslidarDriver::poll, this));
+
+
+  //difop_poll_timer_ = this->create_wall_timer(0s, std::bind(&rslidarDriver::difopPoll, this));
+  //poll_timer_ = this->create_wall_timer(0s, std::bind(&rslidarDriver::poll, this));
   
   this->get_parameter("time_synchronization", time_synchronization_);
 
@@ -167,26 +169,41 @@ namespace rslidar_driver
 }
 
 
-  rslidarDriver::~rslidarDriver()
-  {
-    // Make sure to join the thread on shutdown.
-    /*if (difop_thread_.joinable()) {
-      difop_thread_.join();
-    }
-    if (poll_thread_.joinable()) {
-      poll_thread_.join();
-    }*/
+rslidarDriver::~rslidarDriver()
+{
+  // Make sure to join the thread on shutdown.
+  if (difop_thread_.joinable()) {
+    difop_thread_.join();
   }
+  if (poll_thread_.joinable()) {
+    poll_thread_.join();
+  }
+}
 
+void rslidarDriver::pollThread(void)
+{
+  while (rclcpp::ok())
+  {
+    this->poll();
+  }
+}
 
-
+void rslidarDriver::difopPollThread(void)
+{
+  // reading and publishing scans as fast as possible.
+  while (rclcpp::ok())
+  {
+    this->difopPoll();
+  }
+}
   
 /** poll the device
  *
  *  @returns true unless end of file reached
  */
 bool rslidarDriver::poll(void)
-{  // Allocate a new shared pointer for zero-copy sharing with other nodelets.
+{  
+  // Allocate a new shared pointer for zero-copy sharing with other nodelets.
   rslidar_msgs::msg::RslidarScan::UniquePtr scan(new rslidar_msgs::msg::RslidarScan());
 
   // Since the rslidar delivers data at a very high rate, keep
@@ -329,21 +346,18 @@ bool rslidarDriver::poll(void)
 
 void rslidarDriver::difopPoll(void)
 {
-  // reading and publishing scans as fast as possible.
 
-  //while (rclcpp::ok())
-  //{
-    // keep reading
-    rslidar_msgs::msg::RslidarPacket::UniquePtr difop_packet_ptr(new rslidar_msgs::msg::RslidarPacket());
-    int rc = difop_input_->getPacket(*difop_packet_ptr, config_.time_offset);
-    if (rc == 0)
-    {
-      //RCLCPP_DEBUG("[driver] Publishing a difop data.");
-      difop_output_->publish(std::move(difop_packet_ptr));
-    }
-    if (rc < 0)
-      return;  // end of file reached?
-  //}
+  // keep reading
+  rslidar_msgs::msg::RslidarPacket::UniquePtr difop_packet_ptr(new rslidar_msgs::msg::RslidarPacket());
+  int rc = difop_input_->getPacket(*difop_packet_ptr, config_.time_offset);
+  if (rc == 0)
+  {
+    //RCLCPP_DEBUG("[driver] Publishing a difop data.");
+    difop_output_->publish(std::move(difop_packet_ptr));
+  }
+  if (rc < 0)
+    return;  // end of file reached?
+
 }
 
 

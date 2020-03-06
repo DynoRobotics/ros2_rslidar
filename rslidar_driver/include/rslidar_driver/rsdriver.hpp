@@ -51,6 +51,9 @@ public:
   bool poll(void);
   void difopPoll(void);
 
+  void pollThread(void);
+  void difopPollThread(void);
+
 private:
   /// Callback for dynamic reconfigure
   void on_parameter_event(const rcl_interfaces::msg::ParameterEvent::SharedPtr event, rclcpp::Logger logger);
@@ -73,16 +76,21 @@ private:
   rclcpp::Publisher<rslidar_msgs::msg::RslidarScan>::SharedPtr msop_output_;
   rclcpp::Publisher<rslidar_msgs::msg::RslidarPacket>::SharedPtr difop_output_;
   rclcpp::Publisher<sensor_msgs::msg::TimeReference>::SharedPtr output_sync_;
+
+  rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_msop_;
+  rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_difop_;
+  rclcpp::callback_group::CallbackGroup::SharedPtr callback_group_sync_;
+
   // Converter convtor_;
   /** diagnostics updater */
   diagnostic_updater::Updater diagnostics_;
   double diag_min_freq_;
   double diag_max_freq_;
   std::shared_ptr<diagnostic_updater::TopicDiagnostic> diag_topic_;
-  //std::thread difop_thread_;
-  //std::thread poll_thread_;
-  rclcpp::TimerBase::SharedPtr poll_timer_;
-  rclcpp::TimerBase::SharedPtr difop_poll_timer_;
+  std::thread difop_thread_;
+  std::thread poll_thread_;
+  //rclcpp::TimerBase::SharedPtr poll_timer_;
+  //rclcpp::TimerBase::SharedPtr difop_poll_timer_;
   
 
   // add for time synchronization

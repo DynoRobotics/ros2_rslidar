@@ -34,6 +34,11 @@ Convert::Convert(const rclcpp::NodeOptions& options) : Node("cloud_node", option
   this->get_parameter("output_points_topic", output_points_topic);
   output_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(output_points_topic, 10);
 
+  this->callback_group_packets_ = this->create_callback_group(
+    rclcpp::callback_group::CallbackGroupType::MutuallyExclusive);
+
+  auto msop_opt = rclcpp::SubscriptionOptions();
+    msop_opt.callback_group = this->callback_group_packets_;
 
   // subscribe to rslidarScan packets
   std::string input_packets_topic;

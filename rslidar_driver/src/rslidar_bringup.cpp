@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 
   rclcpp::init(argc, argv);
 
-  rclcpp::executors::SingleThreadedExecutor exec;
+  rclcpp::executors::MultiThreadedExecutor exec;
   
   rclcpp::NodeOptions options(rclcpp::NodeOptions().use_intra_process_comms(true));
 
